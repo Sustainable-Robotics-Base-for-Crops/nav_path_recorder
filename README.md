@@ -18,26 +18,26 @@ The file is written in the working directory under the name `path_performed.json
 
 ## Path2D
 
-`Path2D` is the geometry backend (also linked as the `nav_path_recorder_lib` library):
+The geometry backend is `nav_util::Path2D`, provided by the `nav_util` package (included via `nav_util/path2d.hpp`). This node only drives it; `Path2D`:
 
 - accumulates points with a minimal inter-point distance (`dist_min`, default `0.09 m`);
 - stores per-point speed, tool state, and course;
-- computes curvature over a sliding window (`active_window`, default `1.5 m`) using a least-squares fit (`LeastSquares`, Eigen-based);
+- computes curvature over a sliding window (`active_window`, default `1.5 m`) using a least-squares fit (`nav_util::LeastSquares`, Eigen-based);
 - smooths the path (`filtering`) and serializes it to/from the Agri JSON format.
 
 ## Parameters
 
-| Parameter               | Default | Description                                                       |
-| ----------------------- | ------- | ----------------------------------------------------------------- |
-| `path.filtering_degree` | `0`     | Path smoothing degree applied while recording                     |
+| Parameter               | Default | Description                                                            |
+| ----------------------- | ------- | ---------------------------------------------------------------------- |
+| `path.filtering_degree` | `0`     | Path smoothing degree applied while recording                          |
 | `vehicle_id`            | —       | Vehicle identifier stored in the saved file (configure fails if empty) |
 
 ## Topics
 
-| Topic            | Type                    | Direction | Description                                   |
-| ---------------- | ----------------------- | --------- | --------------------------------------------- |
+| Topic            | Type                    | Direction | Description                                        |
+| ---------------- | ----------------------- | --------- | -------------------------------------------------- |
 | `/loc/odom`      | `nav_msgs/msg/Odometry` | In        | Robot pose and linear speed used to build the path |
-| `path_performed` | `nav_msgs/msg/Path`     | Out       | Recorded path (for visualization)             |
+| `path_performed` | `nav_msgs/msg/Path`     | Out       | Recorded path (for visualization)                  |
 
 The `/loc/odom` subscription is created in the **active** lifecycle state only.
 

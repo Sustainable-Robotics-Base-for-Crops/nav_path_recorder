@@ -16,10 +16,6 @@
   <depend>rclcpp_lifecycle</depend>
   <depend>nav_util</depend>
   <depend>nav_msgs</depend>
-  <depend>eigen</depend>
-  <depend>geographiclib</depend>
-  <depend>nlohmann-json-dev</depend>
-  <depend>angles</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_cmake_cppcheck</test_depend>

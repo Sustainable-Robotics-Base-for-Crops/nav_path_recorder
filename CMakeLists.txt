@@ -14,31 +14,14 @@ set(dependencies
   rclcpp_components
   rclcpp_lifecycle
   nav_util
-  nav_msgs
-  GeographicLib
-  nlohmann_json
-  angles)
+  nav_msgs)
 
 find_package(ament_cmake REQUIRED)
-find_package(Eigen3 REQUIRED NO_MODULE)
-# Geographiclib installs FindGeographicLib.cmake to this non-standard location
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/usr/share/cmake/geographiclib/")
 foreach(dep ${dependencies})
   find_package(${dep} REQUIRED)
 endforeach()
 
 include_directories(include)
-
-add_library(${PROJECT_NAME}_lib SHARED
-  src/path2d.cpp
-  src/least_squares.cpp)
-target_link_libraries (${PROJECT_NAME}_lib
-  Eigen3::Eigen)
-ament_target_dependencies(${PROJECT_NAME}_lib
-  ${dependencies})
-target_include_directories(${PROJECT_NAME}_lib PUBLIC
-  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-  "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
 
 add_library(${PROJECT_NAME} SHARED
   src/path_recorder.cpp)
@@ -50,14 +33,9 @@ rclcpp_components_register_node(${PROJECT_NAME}
 
 install(TARGETS
   ${PROJECT_NAME}
-  ${PROJECT_NAME}_lib
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
-
-install(
-  DIRECTORY include/
-  DESTINATION include/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

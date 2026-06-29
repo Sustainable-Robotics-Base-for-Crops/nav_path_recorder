@@ -5,7 +5,7 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
-#include "nav_path_recorder/path2d.hpp"
+#include "nav_util/path2d.hpp"
 #include "nav_util/tf_to_wgs84.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/path.hpp"
@@ -48,7 +48,7 @@ private:
   std::string path_vehicle_name_;
   bool tools_state_{ false };
 
-  Path2D path_;
+  nav_util::Path2D path_;
   std::unique_ptr<nav_util::TfToWgs84> tf_to_wgs84_;
 
   rclcpp::TimerBase::SharedPtr timer_;
