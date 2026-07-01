@@ -1,0 +1,5 @@
+/**:
+  ros__parameters:
+    path:
+      filtering_degree: 0
+    vehicle_id: v1

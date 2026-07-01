@@ -26,10 +26,10 @@ LNI::CallbackReturn PathRecorder::on_configure(const rclcpp_lifecycle::State&)
     return LNI::CallbackReturn::FAILURE;
   }
 
-  tf_to_wgs84_ = std::make_unique<nav_util::TfToWgs84>(shared_from_this());
-
   path_pub_ = this->create_publisher<nav_msgs::msg::Path>("path_performed", 10);
   timer_ = this->create_wall_timer(10s, std::bind(&PathRecorder::timer_callback, this));
+
+  tf_to_wgs84_ = std::make_unique<nav_util::TfToWgs84>(shared_from_this());
 
   return LNI::CallbackReturn::SUCCESS;
 }
