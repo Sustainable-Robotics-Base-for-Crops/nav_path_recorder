@@ -20,8 +20,6 @@ At configure, the node reads `vehicle_id` and starts the autosave timer. Configu
 
 ## Parameters
 
-### Node parameters
-
 | Parameter               | Default | Description                                                |
 | ----------------------- | ------- | ---------------------------------------------------------- |
 | `path.filtering_degree` | `0`     | Declared but not used. Deactivation applies `filtering(1)` |
