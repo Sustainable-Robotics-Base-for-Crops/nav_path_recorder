@@ -12,7 +12,7 @@ On each `/loc/odom` message (when active):
 
 A 10 s timer saves the current path to `path_performed.json` while recording is active.
 
-On deactivation, recording stops. The path is smoothed with `filtering(1)`, saved to `path_performed.json`, then cleared. The file uses file type `work_performed`, stores the WGS84 anchor (`lat`, `lon`, `alt`) resolved at activation, and per-point position, speed, and `working_zone`.
+On deactivation, recording stops. The path is smoothed with `filtering(1)`, saved to `path_performed.json`, then cleared. The file uses file type `work_performed`, stores the WGS84 anchor (`lat`, `lon`, `alt`) resolved at activation, a trajectory section with `section_type: row_path`, and per-point position, speed, and `working_zone`.
 
 At configure, the node reads `vehicle_id` and starts the autosave timer. Configure fails if `vehicle_id` is empty. At activate, the WGS84 anchor is resolved from TF (`lookup_tf_to_wgs84`). Activation fails if the TF lookup fails.
 
