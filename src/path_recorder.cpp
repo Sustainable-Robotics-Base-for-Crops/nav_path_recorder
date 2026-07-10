@@ -36,7 +36,7 @@ LNI::CallbackReturn PathRecorder::on_configure(const rclcpp_lifecycle::State&)
 
 LNI::CallbackReturn PathRecorder::on_activate(const rclcpp_lifecycle::State& state)
 {
-  if (tf_to_wgs84_->lookup_tf_to_wgs84(path_.wgs84_anchor_lat, path_.wgs84_anchor_lon) == false)
+  if (tf_to_wgs84_->lookup_tf_to_wgs84(path_.wgs84_anchor_lat, path_.wgs84_anchor_lon, path_.wgs84_anchor_alt) == false)
   {
     RCLCPP_ERROR_STREAM(this->get_logger(), "lookup_tf_to_wgs84 failed");
     return LNI::CallbackReturn::FAILURE;
