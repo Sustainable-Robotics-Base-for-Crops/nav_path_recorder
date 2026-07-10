@@ -1,7 +1,6 @@
 // Copyright 2026 SABI AGRI
 
 #include "nav_path_recorder/path_recorder.hpp"
-#include "nav_util/geometry_conversion.hpp"
 
 using std::placeholders::_1;
 using namespace std::chrono_literals;
@@ -11,13 +10,11 @@ namespace nav_path_recorder
 PathRecorder::PathRecorder(const rclcpp::NodeOptions& options)
   : rclcpp_lifecycle::LifecycleNode("path_recorder", options)
 {
-  this->declare_parameter("path.filtering_degree", path_filtering_degree_);
   this->declare_parameter("vehicle_id", path_vehicle_name_);
 }
 
 LNI::CallbackReturn PathRecorder::on_configure(const rclcpp_lifecycle::State&)
 {
-  this->get_parameter("path.filtering_degree", path_filtering_degree_);
   this->get_parameter("vehicle_id", path_vehicle_name_);
 
   if (path_vehicle_name_.empty())
@@ -26,7 +23,6 @@ LNI::CallbackReturn PathRecorder::on_configure(const rclcpp_lifecycle::State&)
     return LNI::CallbackReturn::FAILURE;
   }
 
-  path_pub_ = this->create_publisher<nav_msgs::msg::Path>("path_performed", 10);
   timer_ = this->create_wall_timer(10s, std::bind(&PathRecorder::timer_callback, this));
 
   tf_to_wgs84_ = std::make_unique<nav_util::TfToWgs84>(shared_from_this());
@@ -67,7 +63,6 @@ LNI::CallbackReturn PathRecorder::on_deactivate(const rclcpp_lifecycle::State& s
 LNI::CallbackReturn PathRecorder::on_cleanup(const rclcpp_lifecycle::State&)
 {
   timer_.reset();
-  path_pub_.reset();
   return LNI::CallbackReturn::SUCCESS;
 }
 
@@ -83,10 +78,6 @@ void PathRecorder::timer_callback()
 
 void PathRecorder::odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg)
 {
-  double yaw;
-
-  nav_util::quaternion_to_yaw(msg->pose.pose.orientation, yaw);
-
   path_.add_point(msg->pose.pose.position.x, msg->pose.pose.position.y);
 
   double s = std::round(msg->twist.twist.linear.x * 10) / 10.0;

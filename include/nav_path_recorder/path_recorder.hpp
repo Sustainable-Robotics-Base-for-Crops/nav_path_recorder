@@ -8,7 +8,6 @@
 #include "nav_util/path2d.hpp"
 #include "nav_util/tf_to_wgs84.hpp"
 #include "nav_msgs/msg/odometry.hpp"
-#include "nav_msgs/msg/path.hpp"
 
 using LNI = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface;
 
@@ -44,7 +43,6 @@ protected:
   void odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg);
 
 private:
-  int path_filtering_degree_{ 0 };
   std::string path_vehicle_name_;
   bool tools_state_{ false };
 
@@ -53,7 +51,6 @@ private:
 
   rclcpp::TimerBase::SharedPtr timer_;
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
-  rclcpp_lifecycle::LifecyclePublisher<nav_msgs::msg::Path>::SharedPtr path_pub_;
 };
 }  // namespace nav_path_recorder
 
