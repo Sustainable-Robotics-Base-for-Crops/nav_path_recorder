@@ -1,6 +1,6 @@
 # nav_path_recorder
 
-Lifecycle node that records the path travelled by the robot. It collects `/loc/odom` poses into a `nav_util::Path2D` buffer and saves them as an Agri `work_performed` JSON file consumable by [`nav_replay`](../nav_replay/README.md).
+Lifecycle node that records the path travelled by the robot. It collects `/loc/odom` poses into a `nav_util::Path2D` buffer and saves them as an Agri `work_performed` JSON file consumable by [`nav_replay`](../nav_replay/README.md) after conversion to `mission_order`.
 
 ## Overview
 
@@ -8,7 +8,7 @@ On each `/loc/odom` message (when active):
 
 1. Append the `(x, y)` position to the path (minimum spacing `0.09` m via `Path2D`).
 2. Store the rounded linear speed on the last point (magnitude at least `0.1` m/s).
-3. Set `working_zone` to `false` for every point (`tools_state_` is never updated).
+3. Set `working_zone` to `false` for every point.
 
 A 10 s timer saves the current path to `path_performed.json` while recording is active.
 
