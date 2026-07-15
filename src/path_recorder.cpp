@@ -10,14 +10,14 @@ namespace nav_path_recorder
 PathRecorder::PathRecorder(const rclcpp::NodeOptions& options)
   : rclcpp_lifecycle::LifecycleNode("path_recorder", options)
 {
-  this->declare_parameter("vehicle_id", path_vehicle_name_);
+  this->declare_parameter("vehicle_id", vehicle_id_);
 }
 
 LNI::CallbackReturn PathRecorder::on_configure(const rclcpp_lifecycle::State&)
 {
-  this->get_parameter("vehicle_id", path_vehicle_name_);
+  this->get_parameter("vehicle_id", vehicle_id_);
 
-  if (path_vehicle_name_.empty())
+  if (vehicle_id_.empty())
   {
     RCLCPP_ERROR_STREAM(this->get_logger(), "Need a vehicle_id to save path");
     return LNI::CallbackReturn::FAILURE;
@@ -54,7 +54,7 @@ LNI::CallbackReturn PathRecorder::on_deactivate(const rclcpp_lifecycle::State& s
 
   RCLCPP_INFO_STREAM(this->get_logger(), "save path in ./path_performed.json");
   path_.filtering(1);
-  path_.save("path_performed.json", "work_performed", path_vehicle_name_);
+  path_.save("path_performed.json", "work_performed", vehicle_id_);
   path_.clear();
 
   return LNI::CallbackReturn::SUCCESS;
@@ -73,14 +73,14 @@ LNI::CallbackReturn PathRecorder::on_shutdown(const rclcpp_lifecycle::State&)
 
 void PathRecorder::timer_callback()
 {
-  path_.save("path_performed.json", "work_performed", path_vehicle_name_);
+  path_.save("path_performed.json", "work_performed", vehicle_id_);
 }
 
 void PathRecorder::odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg)
 {
   path_.add_point(msg->pose.pose.position.x, msg->pose.pose.position.y);
 
-  double s = std::round(msg->twist.twist.linear.x * 10) / 10.0;
+  double s = std::round(msg->twist.twist.linear.x * 10) / 10.;
 
   if (fabs(s) < 0.1)
   {
@@ -88,7 +88,7 @@ void PathRecorder::odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg)
   }
 
   path_.set_speed_for_last_point(s);
-  path_.set_tools_for_last_point(tools_state_);
+  path_.set_tools_for_last_point(false);
 }
 }  // namespace nav_path_recorder
 

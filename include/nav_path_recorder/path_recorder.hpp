@@ -43,8 +43,7 @@ protected:
   void odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg);
 
 private:
-  std::string path_vehicle_name_;
-  bool tools_state_{ false };
+  std::string vehicle_id_{ "" };
 
   nav_util::Path2D path_;
   std::unique_ptr<nav_util::TfToWgs84> tf_to_wgs84_;
